@@ -1,3 +1,9 @@
+// 基础学习
+mod basic_learning {
+    // 2.猜数字游戏
+    pub mod guess_number;
+}
+
 fn main() {
-    println!("Hello, world!");
+    basic_learning::guess_number::run_game();
 }
