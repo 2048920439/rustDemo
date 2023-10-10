@@ -2,7 +2,8 @@ use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
 
-pub fn run_game() {
+// https://kaisery.github.io/trpl-zh-cn/ch02-00-guessing-game-tutorial.html
+pub fn run() {
     println!("Guess the number!");
 
     let secret_number: u8 = rand::thread_rng().gen_range(1..=100);

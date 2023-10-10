@@ -5,5 +5,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::guess_number::run_game();
+    basic_learning::guess_number::run();
 }
