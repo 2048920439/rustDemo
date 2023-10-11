@@ -2,12 +2,14 @@
 
 // 基础学习
 mod basic_learning {
-    // 2. 猜数字游戏
+    // 1. 猜数字游戏
     pub mod guess_number;
-    // 3. 常见编程概念
+    // 2. 常见编程概念
     pub mod common_concept;
+    // 3.所有权
+    pub mod ownership;
 }
 
 fn main() {
-    basic_learning::common_concept::control_for();
+    basic_learning::ownership::slice();
 }
