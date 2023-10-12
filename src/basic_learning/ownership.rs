@@ -114,7 +114,7 @@ pub fn slice() {
             }
         }
 
-        return &s[..]
+        return &s[..];
     }
 
     let str = "Hello world";
