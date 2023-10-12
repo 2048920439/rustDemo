@@ -6,10 +6,10 @@ mod basic_learning {
     pub mod guess_number;
     // 2. 常见编程概念
     pub mod common_concept;
-    // 3.所有权
+    // 5.所有权
     pub mod ownership;
 }
 
 fn main() {
-    basic_learning::ownership::slice();
+    basic_learning::ownership::struct_example();
 }

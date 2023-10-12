@@ -114,11 +114,77 @@ pub fn slice() {
             }
         }
 
-        &s[..]
+        return &s[..]
     }
 
     let str = "Hello world";
     let first = first_word(str);
     println!("{str}");
     println!("{first}");
+}
+
+
+// 练习
+pub fn struct_example() {
+    #[derive(Debug)]
+    struct Person {
+        name: String,
+        age: Box<u8>,
+    }
+
+    let person = Person {
+        name: String::from("Alice"),
+        age: Box::new(20),
+    };
+
+    // 通过这种解构式模式匹配，person.name 的所有权被转移给新的变量 `name`
+    // 但是，这里 `age` 变量却是对 person.age 的引用, 这里 ref 的使用相当于: let age = &person.age
+    let Person { name, ref age } = person;
+
+    println!("The person's age is {}", age);
+
+    println!("The person's name is {}", name);
+
+    // Error! 原因是 person 的一部分已经被转移了所有权，因此我们无法再使用它
+    //println!("The person struct is {:?}", person);
+
+    // 虽然 `person` 作为一个整体无法再被使用，但是 `person.age` 依然可以使用
+    println!("The person's age from person struct is {}", person.age);
+}
+
+pub fn t2() {
+    let s1 = String::from("hello, world");
+    let s2 = take_ownership(s1);
+
+    println!("{}", s2);
+
+    // 只能修改下面的代码!
+    fn take_ownership(s: String) -> String {
+        println!("{}", s);
+        s
+    }
+}
+
+pub fn t5() {
+    let x = (1, 2, (), "hello");
+    let y = x;
+    println!("{:?}, {:?}", x, y);
+}
+
+pub fn t8() {
+    let t = (String::from("hello"), String::from("world"));
+
+    let _s = t.0;
+
+    // 仅修改下面这行代码，且不要使用 `_s`
+    println!("{:?}", t.1);
+}
+
+pub fn t9() {
+    let t = (String::from("hello"), String::from("world"));
+
+    // 填空，不要修改其它代码
+    let (ref s1, ref s2) = t;
+
+    println!("{:?}, {:?}, {:?}", s1, s2, t); // -> "hello", "world", ("hello", "world")
 }
