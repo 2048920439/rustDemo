@@ -13,5 +13,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::compound_type::str::operation()
+    basic_learning::compound_type::struct_test::run()
 }

@@ -1,4 +1,6 @@
+// 字符串
 pub mod str{
+    // 转换
     pub fn conversion() {
         // 将 &str 类型转为 String 类型
         {
@@ -169,5 +171,55 @@ pub mod str{
         for b in "字符串".bytes() {
             println!("{}", b);
         }
+    }
+}
+
+// 结构体
+pub mod struct_test {
+    // 定义一个结构
+    #[derive(Debug)]
+    pub struct User {
+        active: bool,
+        username: String,
+        email: String,
+        sign_in_count: u64,
+    }
+
+    pub fn run() {
+        // 创建一个实例
+        // 初始化实例时，每个字段都需要进行初始化
+        // 初始化时的字段顺序不需要和结构体定义时的顺序一致
+        let mut user1 = User {
+            email: String::from("someone@example.com"),
+            username: String::from("username"),
+            active: true,
+            sign_in_count: 1,
+        };
+        // 通过.读写字段
+        let username = &mut user1.username;
+        username.push_str("_new");
+        dbg!(&user1.username);
+        user1.username.push_str("_and_new");
+        dbg!(&user1.username);
+
+        // 类似js,当函数参数和结构体字段同名时，可以直接使用缩略的方式进行初始化
+        fn create_user(email: String, username: String) -> User {
+            User {
+                email,
+                username,
+                active: true,
+                sign_in_count: 1,
+            }
+        }
+
+        let user2 = create_user("20482048@email.cc".to_string(), "init name".to_string());
+        dbg!(&user2.username);
+
+        // 类似js的 结构体更新语法
+        let user2 = User {
+            username: "new_name".to_string(),
+            ..user2
+        };
+        dbg!(&user2.username);
     }
 }
