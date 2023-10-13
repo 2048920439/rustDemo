@@ -257,3 +257,49 @@ pub mod struct_test {
         subject.some_method();
     }
 }
+
+// 枚举
+pub mod enum_test {
+    pub fn base() {
+        // 枚举类型是一个类型，它会包含所有可能的枚举成员,
+        #[derive(Debug)]
+        enum PokerSuit {
+            Clubs,
+            Spades,
+            Diamonds,
+            Hearts,
+        }
+
+        #[derive(Debug)]
+        struct PokerCard {
+            suit: PokerSuit,
+            value: u8,
+        }
+
+        // 枚举值是该类型中的具体某个成员的实例
+        let heart = PokerSuit::Hearts;
+        let diamond = PokerSuit::Diamonds;
+        dbg!(heart);
+        dbg!(diamond);
+
+
+        let c1 = PokerCard { value: 1, suit: PokerSuit::Clubs };
+        dbg!(c1);
+
+
+        // 直接将数据信息关联到枚举成员上
+        // 任何类型的数据都可以放入枚举成员中  例如字符串、数值、结构体甚至另一个枚举。
+        #[derive(Debug)]
+        enum PokerCardLaconic {
+            Clubs(char),
+            Spades(char),
+            Diamonds(char),
+            Hearts(char),
+            // 同一个枚举类型下的不同成员还能持有不同的数据类型
+            Test(String)
+        }
+        let c2 = PokerCardLaconic::Clubs('7');
+        dbg!(c2);
+
+    }
+}
