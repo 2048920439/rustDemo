@@ -1,5 +1,5 @@
 // 字符串
-pub mod str{
+pub mod str {
     // 转换
     pub fn conversion() {
         // 将 &str 类型转为 String 类型
@@ -147,8 +147,7 @@ pub mod str{
             assert_eq!(s3, "hello,world!");
             // 此时再使用s1则会报错
             // println!("{}",s1);
-            println!("{}",s2);
-
+            println!("{}", s2);
         }
 
         // 使用 format! 连接字符串
@@ -176,16 +175,17 @@ pub mod str{
 
 // 结构体
 pub mod struct_test {
-    // 定义一个结构
-    #[derive(Debug)]
-    pub struct User {
-        active: bool,
-        username: String,
-        email: String,
-        sign_in_count: u64,
-    }
+    // 基础部分
+    pub fn base() {
+        // 定义一个结构
+        #[derive(Debug)]
+        struct User {
+            active: bool,
+            username: String,
+            email: String,
+            sign_in_count: u64,
+        }
 
-    pub fn run() {
         // 创建一个实例
         // 初始化实例时，每个字段都需要进行初始化
         // 初始化时的字段顺序不需要和结构体定义时的顺序一致
@@ -221,5 +221,39 @@ pub mod struct_test {
             ..user2
         };
         dbg!(&user2.username);
+    }
+
+    // 元组结构体
+    pub fn tuple() {
+        // 结构体必须要有名称，但是结构体的字段可以没有名称
+        // 这种结构体长得很像元组，因此被称为元组结构体
+
+        #[derive(Debug)]
+        struct Rgb(u8, u8, u8);
+
+        let color_red = Rgb(255, 0, 0);
+        dbg!(color_red);
+    }
+
+    // 单元结构体
+    pub fn unit_like() {
+        // 没有任何字段和属性
+        // 如果你定义一个类型，但是不关心该类型的内容, 只关心它的行为时
+        #[derive(Debug)]
+        struct AlwaysEqual;
+
+        trait SomeTrait {
+            fn some_method(&self);
+        }
+        // 我们不关心 AlwaysEqual 的字段数据，只关心它的行为，因此将它声明为单元结构体，然后再为它实现某个特征
+        impl SomeTrait for AlwaysEqual {
+            fn some_method(&self) {
+                dbg!(&self);
+            }
+        }
+
+        let subject = AlwaysEqual;
+        dbg!(&subject);
+        subject.some_method();
     }
 }
