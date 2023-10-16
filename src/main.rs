@@ -12,8 +12,10 @@ mod basic_learning {
     pub mod compound_type;
     // 5.流程控制语句
     pub mod flow_control;
+    // 6.模式匹配
+    pub mod intro;
 }
 
 fn main() {
-    basic_learning::flow_control::loop_test::loop_test()
+    basic_learning::intro::matches::run()
 }
