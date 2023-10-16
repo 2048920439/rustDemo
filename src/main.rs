@@ -10,8 +10,10 @@ mod basic_learning {
     pub mod ownership;
     // 4.复合类型
     pub mod compound_type;
+    // 5.流程控制语句
+    pub mod flow_control;
 }
 
 fn main() {
-    basic_learning::compound_type::arr::run()
+    basic_learning::flow_control::loop_test::loop_test()
 }
