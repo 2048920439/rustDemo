@@ -13,5 +13,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::compound_type::enum_test::base()
+    basic_learning::compound_type::arr::run()
 }
