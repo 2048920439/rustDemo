@@ -14,8 +14,10 @@ mod basic_learning {
     pub mod flow_control;
     // 6.模式匹配
     pub mod intro;
+    // 7.方法
+    pub mod method;
 }
 
 fn main() {
-    basic_learning::intro::all_patterns::q()
+    basic_learning::method::definition::d()
 }
