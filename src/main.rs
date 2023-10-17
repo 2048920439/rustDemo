@@ -17,5 +17,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::intro::matches::run()
+    basic_learning::intro::all_patterns::q()
 }
