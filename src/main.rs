@@ -21,5 +21,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::intro::generic::display_const_generics_array()
+    basic_learning::intro::trait_test::run_3()
 }
