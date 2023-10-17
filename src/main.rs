@@ -13,11 +13,13 @@ mod basic_learning {
     // 5.流程控制语句
     pub mod flow_control;
     // 6.模式匹配
-    pub mod intro;
+    pub mod match_pattern;
     // 7.方法
     pub mod method;
+    // 8.泛型和特征
+    pub mod intro;
 }
 
 fn main() {
-    basic_learning::method::definition::d()
+    basic_learning::intro::generic::display_const_generics_array()
 }
