@@ -21,5 +21,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::intro::test::test_3()
+    basic_learning::intro::self_demo::run()
 }

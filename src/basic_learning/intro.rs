@@ -82,13 +82,13 @@ pub mod trait_test {
     use std::fmt::Display;
 
     // 定义特征
-    pub trait Summary {
+    trait Summary {
         // 使用 trait 关键字来声明一个特征
         // 大括号中定义了该特征的所有方法
         fn summarize(&self) -> String;
     }
 
-    pub struct Post {
+    struct Post {
         pub title: String,
         // 标题
         pub author: String,
@@ -96,7 +96,7 @@ pub mod trait_test {
         pub content: String, // 内容
     }
 
-    pub struct Weibo {
+    struct Weibo {
         pub username: String,
         pub content: String
     }
@@ -313,7 +313,7 @@ pub mod trait_test {
     }
 }
 
-pub mod test {
+pub mod trait_demo {
     use std::fmt;
     use std::fmt::{Debug, Display, Formatter};
     use std::ops::Add;
@@ -382,7 +382,7 @@ pub mod test {
         }
 
         impl Display for FileState {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            fn fmt(&self, f: &mut Formatter) -> fmt::Result {
                 match *self {
                     FileState::Open => write!(f, "OPEN"),
                     FileState::Closed => write!(f, "CLOSED"),
@@ -391,7 +391,7 @@ pub mod test {
         }
 
         impl Display for File {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            fn fmt(&self, f: &mut Formatter) -> fmt::Result {
                 write!(f, "Display: <{} ({})>", self.name, self.state)
             }
         }
@@ -417,3 +417,199 @@ pub mod test {
         println!("{}", f6);     // 调用Display.fmt
     }
 }
+
+// 特征对象 1
+pub mod trait_object_test_1 {
+    pub struct Post {}
+
+    pub struct Weibo {}
+
+    pub trait Summary {
+        fn summarize(&self) -> String { "Summary Default.summarize".to_string() }
+    }
+
+    impl Summary for Post {
+        fn summarize(&self) -> String { "Summary Post.summarize".to_string() }
+    }
+
+    impl Summary for Weibo {
+        fn summarize(&self) -> String { "Summary Weibo.summarize".to_string() }
+    }
+
+    // Box<dyn Summary> 特征对象指向实现了 Summary 特征的类型的实例
+    fn returns_summarizable(switch: bool) -> Box<dyn Summary> {
+        if switch {
+            Box::new(Post {})
+        } else {
+            Box::new(Weibo {})
+        }
+    }
+
+    pub fn run() {
+        let t = returns_summarizable(true);
+        let f = returns_summarizable(false);
+        dbg!(t.summarize());
+        dbg!(f.summarize());
+    }
+}
+
+// 特征对象 2
+pub mod trait_object_test_2 {
+    trait Draw {
+        fn draw(&self) -> String;
+    }
+
+    impl Draw for u8 {
+        fn draw(&self) -> String {
+            format!("u8: {}", *self)
+        }
+    }
+
+    impl Draw for f64 {
+        fn draw(&self) -> String {
+            format!("f64: {}", *self)
+        }
+    }
+
+    // 若 T 实现了 Draw 特征， 则调用该函数时传入的 Box<T> 可以被隐式转换成函数参数签名中的 Box<dyn Draw>
+    fn draw1(x: Box<dyn Draw>) -> String {
+        // 由于实现了 Deref 特征，Box 智能指针会自动解引用为它所包裹的值，然后调用该值对应的类型上定义的 `draw` 方法
+        x.draw()
+    }
+
+    fn draw2(x: &dyn Draw) -> String {
+        x.draw()
+    }
+
+    pub fn run_1() {
+        let x = 1.1f64;
+        // do_something(&x);
+        let y = 8u8;
+
+        // x 和 y 的类型 T 都实现了 `Draw` 特征，因为 Box<T> 可以在函数调用时隐式地被转换为特征对象 Box<dyn Draw>
+        // 基于 x 的值创建一个 Box<f64> 类型的智能指针，指针指向的数据被放置在了堆上
+        dbg!(draw1(Box::new(x)));
+        // 基于 y 的值创建一个 Box<u8> 类型的智能指针
+        dbg!(draw1(Box::new(y)));
+        dbg!(draw2(&x));
+        dbg!(draw2(&y));
+        /*
+            draw1 函数的参数是 Box<dyn Draw> 形式的特征对象，该特征对象是通过 Box::new(x) 的方式创建的
+            draw2 函数的参数是 &dyn Draw 形式的特征对象，该特征对象是通过 &x 的方式创建的
+            dyn 关键字只用在特征对象的类型声明上，在创建时无需使用 dyn
+        */
+    }
+
+    pub struct Button {
+        pub width: u32,
+        pub height: u32,
+        pub label: String,
+    }
+
+    impl Draw for Button {
+        fn draw(&self) -> String { "Button Draw".to_string() }
+    }
+
+    struct SelectBox {
+        width: u32,
+        height: u32,
+        options: Vec<String>,
+    }
+
+    impl Draw for SelectBox {
+        fn draw(&self) -> String { "SelectBox Draw".to_string() }
+    }
+
+    struct Screen {
+        // 任何实现了 Draw 特征的类型，都可以存放其中
+        components: Vec<Box<dyn Draw>>,
+    }
+    // 鸭子类型(duck typing):
+    /*
+        简单来说，就是只关心值长啥样，而不关心它实际是什么。
+        当一个东西走起来像鸭子，叫起来像鸭子，那么它就是一只鸭子
+        就算它实际上是一个奥特曼，也不重要，我们就当它是鸭子。
+     */
+
+    impl Screen {
+        pub fn run(&self) {
+            for component in self.components.iter() {
+                let str = component.draw();
+                println!("Screen run: {:?}", str)
+            }
+        }
+    }
+
+    pub fn run_2() {
+        let screen = Screen {
+            components: vec![
+                Box::new(SelectBox {
+                    width: 75,
+                    height: 10,
+                    options: vec![
+                        String::from("Yes"),
+                        String::from("Maybe"),
+                        String::from("No")
+                    ],
+                }),
+                Box::new(Button {
+                    width: 50,
+                    height: 10,
+                    label: String::from("OK"),
+                }),
+            ],
+        };
+
+        screen.run();
+    }
+}
+
+// 特征对象的动态分发 dyn
+/*
+    https://course.rs/basic/trait/trait-object.html#%E7%89%B9%E5%BE%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8A%A8%E6%80%81%E5%88%86%E5%8F%91
+    静态分发(static dispatch)
+    编译器会为每一个泛型参数对应的具体类型生成一份代码，这种方式是静态分发(static dispatch)，
+    因为是在编译期完成的，对于运行期性能完全没有任何影响。
+*/
+/*
+    动态分发(dynamic dispatch)，在这种情况下，直到运行时，才能确定需要调用什么方法。
+    之前代码中的关键字 dyn 正是在强调这一“动态”的特点
+*/
+/*
+    当类型 Button 实现了特征 Draw 时，
+    类型 Button 的实例对象 btn 可以当作特征 Draw 的特征对象类型来使用，
+    btn 中保存了作为特征对象的数据指针（指向类型 Button 的实例数据）和行为指针（指向 vtable）
+
+    也就是说，btn 是哪个特征对象的实例，它的 vtable 中就包含了该特征的方法。
+*/
+
+// self 与 Self
+// 一个指代当前的实例对象，一个指代特征或者方法类型的别名
+pub mod self_demo {
+    trait Draw {
+        fn draw(&self) -> Self;
+    }
+
+    #[derive(Clone, Debug)]
+    struct Button;
+
+    impl Draw for Button {
+        fn draw(&self) -> Self {
+            return self.clone()
+        }
+    }
+
+    pub fn run() {
+        let button = Button;
+        let new_b = button.draw();
+        dbg!(new_b);
+    }
+}
+
+// 特征对象的限制
+/*
+    不是所有特征都能拥有特征对象，只有对象安全的特征才行。
+    当一个特征的所有方法都有如下属性时，它的对象才是安全的：
+        - 方法的返回类型不能是 Self
+        - 方法没有任何泛型参数
+ */
