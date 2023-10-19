@@ -17,9 +17,9 @@ mod basic_learning {
     // 7.方法
     pub mod method;
     // 8.泛型和特征
-    pub mod intro;
+    pub mod generic_and_traits;
 }
 
 fn main() {
-    basic_learning::intro::self_demo::run()
+    basic_learning::generic_and_traits::self_demo::run()
 }
