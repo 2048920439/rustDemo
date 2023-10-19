@@ -18,8 +18,10 @@ mod basic_learning {
     pub mod method;
     // 8.泛型和特征
     pub mod generic_and_traits;
+    // 9.集合类型
+    pub mod collections;
 }
 
 fn main() {
-    basic_learning::generic_and_traits::self_demo::run()
+    basic_learning::collections::vector::get()
 }
