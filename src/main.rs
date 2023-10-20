@@ -23,5 +23,5 @@ mod basic_learning {
 }
 
 fn main() {
-    basic_learning::collections::vector::get()
+    basic_learning::collections::vector::sort()
 }
